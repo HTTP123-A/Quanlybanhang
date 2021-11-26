@@ -142,6 +142,7 @@ namespace Quanlybanhang
             this.btnLuu.TabIndex = 5;
             this.btnLuu.Text = "Save";
             this.btnLuu.UseVisualStyleBackColor = true;
+            this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
             // 
             // btnHuyBo
             // 
@@ -152,6 +153,7 @@ namespace Quanlybanhang
             this.btnHuyBo.TabIndex = 6;
             this.btnHuyBo.Text = "Cancel";
             this.btnHuyBo.UseVisualStyleBackColor = true;
+            this.btnHuyBo.Click += new System.EventHandler(this.btnHuyBo_Click);
             // 
             // btnXoa
             // 

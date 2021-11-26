@@ -85,10 +85,10 @@ namespace Quanlybanhang
 
             this.btnLuu.Enabled = true;
             this.btnHuyBo.Enabled = true;
-            this.btnThem.Enabled = true;
-            this.btnSua.Enabled = true;
-            this.btnXoa.Enabled = true;
-            this.btnTrove.Enabled = true;
+            this.btnThem.Enabled = false;
+            this.btnSua.Enabled = false;
+            this.btnXoa.Enabled = false;
+            this.btnTrove.Enabled = false;
             this.Data.Enabled = true;
             this.textBox1.Focus();
         }
@@ -125,7 +125,8 @@ namespace Quanlybanhang
 
                 int r = dgvThanhPho.CurrentCell.RowIndex;
                 string strThanhPho = dgvThanhPho.Rows[r].Cells[0].Value.ToString();
-                cmd.CommandText = System.String.Concat("DELETE FROM thanh_pho WHERE thanh_pho='" + strThanhPho + "'");
+                Console.WriteLine(strThanhPho);
+                cmd.CommandText = System.String.Concat("DELETE FROM thanh_pho WHERE ThanhPho='" + strThanhPho + "'");
 
                 cmd.CommandType = CommandType.Text;
                 cmd.ExecuteNonQuery();
@@ -137,6 +138,74 @@ namespace Quanlybanhang
             {
                 MessageBox.Show("Không xoá được!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            conn.Close();
+        }
+
+        private void btnHuyBo_Click(object sender, EventArgs e)
+        {
+            this.textBox1.ResetText();
+            this.textBox2.ResetText();
+
+            this.btnThem.Enabled = true;
+            this.btnSua.Enabled = true;
+            this.btnXoa.Enabled = true;
+            this.btnTrove.Enabled = true;
+
+            this.btnLuu.Enabled = false;
+            this.btnHuyBo.Enabled = false;
+            this.Data.Enabled = false;
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            conn.Open();
+
+            if(Them)
+            {
+                try
+                {
+                    string testlenh = "";
+                    cmd = new MySqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+
+                    Console.WriteLine(Them);
+                    Console.WriteLine(textBox1.Text.ToString());
+                    Console.WriteLine(textBox2.Text.ToString());
+
+                    testlenh = System.String.Concat("INSERT INTO qlkh_db.thanh_pho (ThanhPho, TenThanhPho) VALUES (" + "'" + 
+                        this.textBox1.Text.ToString() + "','" + this.textBox2.Text.ToString() + "')");
+                    Console.WriteLine(testlenh);
+                    cmd.CommandText = testlenh;
+
+                    cmd.CommandType = CommandType.Text;
+                    cmd.ExecuteNonQuery(); //Phải có cái này thì MySQL mới nhận lệnh!
+                    LoadData();
+                    MessageBox.Show("Đã thêm xong!");
+                }
+                catch(MySqlException)
+                {
+                    MessageBox.Show("Không thêm được!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+
+                int r = dgvThanhPho.CurrentCell.RowIndex;
+                string strThanhPho = dgvThanhPho.Rows[r].Cells[0].Value.ToString();
+                cmd.CommandText = System.String.Concat("UPDATE thanh_pho SET TenThanhPho='" 
+                    + this.textBox2.Text.ToString() + "' WHERE ThanhPho='" + strThanhPho + "'");
+
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+
+                LoadData();
+                MessageBox.Show("Đã sửa xong!");
+            }
+
             conn.Close();
         }
     }
